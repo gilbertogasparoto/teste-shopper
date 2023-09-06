@@ -1,8 +1,8 @@
 import React from "react";
 
 export const UploadIcon = ({
-  width = "2rem",
-  height = "2rem",
+  width = "20px",
+  height = "20px",
   fill = "black",
 }: React.SVGProps<SVGAElement>) => (
   <svg

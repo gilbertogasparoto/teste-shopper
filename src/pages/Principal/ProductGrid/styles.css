@@ -1,0 +1,22 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--grey-color);
+  border-radius: 8px;
+}
+
+.grid__list--head,
+.grid__list--item {
+  display: grid;
+  grid-template-columns: 10% 60% 15% 15%;
+  padding: 12px 24px;
+}
+
+.grid__list--head {
+  font-weight: 500;
+  background-color: var(--light-grey-color);
+  padding: 12px 24px;
+  border-radius: 8px 8px 0 0;
+}
