@@ -13,7 +13,7 @@ const Principal: React.FC = () => {
       <header className="principal-header">
         <p className="principal-header__title">Produtos</p>
         <button className="principal-header__button">
-          <UploadIcon fill="white" /> Exportar atualização
+          <UploadIcon fill="white" /> Importar atualização
         </button>
       </header>
 
@@ -41,7 +41,7 @@ const Principal: React.FC = () => {
         <ProductGrid type={gridType} />
       </main>
 
-      <UploadModal />
+      {/* <UploadModal /> */}
     </div>
   );
 };

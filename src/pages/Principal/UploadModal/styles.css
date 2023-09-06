@@ -28,18 +28,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .modal-upload-header__title {
   font-size: 20px;
-  margin-bottom: 8px;
 }
 
-.modal-upload-uploader__container {
+.modal-upload-header__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.modal-upload-uploader__selector,
+.modal-upload-uploader__static {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   align-items: center;
+  gap: 6px;
   justify-content: center;
   width: 100%;
   height: 150px;
@@ -47,25 +55,60 @@
   border: 1px dashed var(--grey-color);
   border-radius: 6px;
   transition: 300ms ease;
+}
+
+.modal-upload-uploader__selector svg path {
+  fill: var(--dark-color);
+  transition: 300ms ease;
+}
+
+.modal-upload-uploader__static svg path {
+  fill: var(--principal-color);
+}
+
+.modal-upload-uploader__selector:hover {
+  background-color: #30ad5d10;
+  border: 1px dashed var(--principal-color);
   cursor: pointer;
 }
 
-.modal-upload-uploader__container:hover {
-  background-color: #30ad5d10;
-  border: 1px dashed var(--principal-color);
+.modal-upload-uploader__selector:hover svg path {
+  fill: var(--principal-color);
+}
+
+.modal-upload-uploader__selector span {
+  font-size: 14px;
+  color: var(--grey-color);
+}
+
+.modal-upload-uploader__static span {
+  font-size: 15px;
+  color: var(--grey-color);
+  cursor: pointer;
 }
 
 .modal-upload-uploader__hidden {
   display: none;
 }
 
-.modal-upload-button {
+.modal-upload-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-upload-footer__button {
   border: none;
   background-color: var(--principal-color);
   padding: 10px 20px;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   color: #fafafa;
   cursor: pointer;
+  transition: 300ms ease;
+}
+
+.modal-upload-footer__button:disabled {
+  background-color: var(--grey-color);
+  color: #fafafa;
 }
