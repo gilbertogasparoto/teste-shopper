@@ -20,8 +20,6 @@ interface iUploadModal {
   handleGenerateRelatory: (data: typePrdRelatory[]) => void;
 }
 
-const requiredKeys = ["product_code", "new_price"];
-
 const UploadModal: React.FC<iUploadModal> = ({
   show,
   handleClose,
