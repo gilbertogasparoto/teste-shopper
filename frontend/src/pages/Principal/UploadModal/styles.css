@@ -91,6 +91,16 @@
   display: none;
 }
 
+.modal-upload-error {
+  margin: 12px 0;
+  color: var(--terciary-color);
+  font-size: 14px;
+}
+
+.modal-upload-error b {
+  color: var(--terciary-color);
+}
+
 .modal-upload-footer {
   display: flex;
   justify-content: flex-end;

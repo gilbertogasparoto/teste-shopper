@@ -20,6 +20,8 @@ interface iUploadModal {
   handleGenerateRelatory: (data: typePrdRelatory[]) => void;
 }
 
+const requiredKeys = ["product_code", "new_price"];
+
 const UploadModal: React.FC<iUploadModal> = ({
   show,
   handleClose,
@@ -30,6 +32,7 @@ const UploadModal: React.FC<iUploadModal> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<typeUpdateValueData[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target && e.target.files && e.target.files.length) {
@@ -46,17 +49,33 @@ const UploadModal: React.FC<iUploadModal> = ({
     }
   };
 
-  const validUpdateArchive = async (obj: typeUpdateValueData[]) => {
-    setLoading(true);
-    try {
-      const { data } = await api.post("/products", obj);
-      handleGenerateRelatory(data);
-      removeFile();
-      handleClose();
-    } catch (err) {
-      console.log(err);
+  const checkValidArquive = (arr: typeUpdateValueData[]) => {
+    for (let el of arr) {
+      if (
+        !el.hasOwnProperty("product_code") ||
+        !el.hasOwnProperty("new_price")
+      ) {
+        return false;
+      }
     }
-    setLoading(false);
+    return true;
+  };
+
+  const validUpdateArchive = async (obj: typeUpdateValueData[]) => {
+    if (checkValidArquive(obj)) {
+      setLoading(true);
+      try {
+        const { data } = await api.post("/products", obj);
+        handleGenerateRelatory(data);
+        removeFile();
+        handleClose();
+      } catch (err) {
+        console.log(err);
+      }
+      setLoading(false);
+    } else {
+      setError(true);
+    }
   };
 
   const removeFile = () => {
@@ -64,6 +83,7 @@ const UploadModal: React.FC<iUploadModal> = ({
       inputFileRef.current.value = "";
       setFile(null);
       setData([]);
+      setError(false);
     }
   };
 
@@ -107,6 +127,14 @@ const UploadModal: React.FC<iUploadModal> = ({
                 </div>
               )}
 
+              {error ? (
+                <div className="modal-upload-error">
+                  É necessário conter os campos <b>"product_code"</b> e
+                  <b>"new_price"</b> no arquivo para realizar a atualização de
+                  preços, favor verificar.
+                </div>
+              ) : null}
+
               <input
                 id="uploader"
                 ref={inputFileRef}
@@ -120,7 +148,7 @@ const UploadModal: React.FC<iUploadModal> = ({
 
             <footer className="modal-upload-footer">
               <button
-                disabled={!file || loading}
+                disabled={!file || loading || error}
                 onClick={() => validUpdateArchive(data)}
                 className="modal-upload-footer__button"
               >

@@ -19,51 +19,57 @@ const validateProducts = async (req: Request, res: Response) => {
       let errors = [];
       let productExists;
 
-      const { product_code, new_price } = product;
-
-      if (isNaN(Number(product_code)) || isNaN(new_price)) {
+      if (!product?.product_code || !product?.new_price) {
         errors.push(
-          `Os parâmetros "product_code" e "new_price" devem ser valores numéricos`
+          `Os parâmetros "product_code" e "new_price" são obrigatórios`
         );
       } else {
-        productExists = await productsModel.getByCode(product_code);
+        const { product_code, new_price } = product;
 
-        if (!productExists || !productExists.length) {
+        if (isNaN(Number(product_code)) || isNaN(new_price)) {
           errors.push(
-            `Nenhum produto com o código "${product_code}" foi encontrado.`
+            `Os parâmetros "product_code" e "new_price" devem ser valores numéricos`
           );
         } else {
-          const { cost_price, sales_price } = productExists[0];
+          productExists = await productsModel.getByCode(product_code);
 
-          if (Number(new_price) < Number(cost_price)) {
+          if (!productExists || !productExists.length) {
             errors.push(
-              `O novo preço de venda inserido não pode ser menor que o preço de custo do produto.`
+              `Nenhum produto com o código "${product_code}" foi encontrado.`
             );
-          }
+          } else {
+            const { cost_price, sales_price } = productExists[0];
 
-          if (
-            priceRounder(Math.abs(Number(new_price) - Number(sales_price))) >
-            priceRounder(sales_price * 0.1)
-          ) {
-            errors.push(
-              `O reajuste do preço não pode ser maior ou menor que 10% do preço atual (max ${priceRounder(
-                sales_price * 0.1
-              )}).`
-            );
-          }
+            if (Number(new_price) < Number(cost_price)) {
+              errors.push(
+                `O novo preço de venda inserido não pode ser menor que o preço de custo do produto.`
+              );
+            }
 
-          const pack = await productsModel.getPackByProductCode(product_code);
+            if (
+              priceRounder(Math.abs(Number(new_price) - Number(sales_price))) >
+              priceRounder(sales_price * 0.1)
+            ) {
+              errors.push(
+                `O reajuste do preço não pode ser maior ou menor que 10% do preço atual (max ${priceRounder(
+                  sales_price * 0.1
+                )}).`
+              );
+            }
 
-          if (pack && pack.length > 1) {
-            errors.push(
-              `Não é possível alterar o valor de um pacote que possui 1 ou mais produtos distintos.`
-            );
+            const pack = await productsModel.getPackByProductCode(product_code);
+
+            if (pack && pack.length > 1) {
+              errors.push(
+                `Não é possível alterar o valor de um pacote que possui 1 ou mais produtos distintos.`
+              );
+            }
           }
         }
       }
 
       relatory.push({
-        product_code,
+        product_code: product?.product_code ? product.product_code : "",
         name:
           productExists && productExists[0]?.name ? productExists[0]?.name : "",
         cost_price:
@@ -74,7 +80,7 @@ const validateProducts = async (req: Request, res: Response) => {
           productExists && productExists[0]?.sales_price
             ? productExists[0]?.sales_price
             : "",
-        new_price,
+        new_price: product?.new_price ? product.new_price : "",
         errors,
       });
     }
