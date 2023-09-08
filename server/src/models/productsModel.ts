@@ -1,3 +1,4 @@
+import { APIError, HttpStatusCode } from "../../errors/BaseError";
 import { iPack } from "../interface/Pack";
 import { iPackedProduct, iProduct } from "../interface/Product";
 import connection from "./connection";
@@ -8,8 +9,6 @@ const getAll = async () => {
 };
 
 const getByCode = async (code: number) => {
-  if (isNaN(code)) throw new Error('"code" deve ser um valor numérico');
-
   const [product] = await connection.execute<iProduct[]>(
     "SELECT * FROM products WHERE code = ?",
     [code]
@@ -19,8 +18,6 @@ const getByCode = async (code: number) => {
 };
 
 const getPackByProductCode = async (code: number) => {
-  if (isNaN(code)) throw new Error('"code" deve ser um valor numérico');
-
   const [pack] = await connection.execute<iPack[]>(
     "SELECT * FROM packs WHERE pack_id IN (SELECT pack_id FROM packs where pack_id = ?)",
     [code]
@@ -30,11 +27,6 @@ const getPackByProductCode = async (code: number) => {
 };
 
 const updateProductPrice = async (code: number, new_price: number) => {
-  if (isNaN(code) || isNaN(code))
-    throw new Error(
-      'Os parâmetros "code" e "new_price" devem ser um valores numéricos'
-    );
-
   const [updated_product] = await connection.execute(
     "UPDATE products SET sales_price = ? WHERE code = ?",
     [new_price, code]
@@ -49,14 +41,15 @@ const updateProductPrice = async (code: number, new_price: number) => {
 
   if (pack_products.length) {
     if (pack_products.length > 1) {
-      const new_pack_price =
-        pack_products
-          .filter((product: iPackedProduct) => product.code !== code)
-          .reduce(
-            (acc: number, curr: iPackedProduct) =>
-              acc + curr.sales_price * curr.qty,
-            0
-          ) + new_price;
+      const new_pack_price = pack_products
+        .filter(
+          (product: iPackedProduct) => Number(product.code) !== Number(code)
+        )
+        .reduce(
+          (acc: number, curr: iPackedProduct) =>
+            acc + curr.sales_price * curr.qty,
+          new_price * pack_products[0].qty
+        );
 
       [updated_pack] = await connection.execute(
         "UPDATE products SET sales_price = ? WHERE code = ?",
@@ -87,9 +80,6 @@ const updateProductPrice = async (code: number, new_price: number) => {
 };
 
 const updatePackPrice = async (pack: iPack, new_price: number) => {
-  if (isNaN(new_price))
-    throw new Error('O parâmetro "new_price" deve ser um valor numérico');
-
   const [updated_pack] = await connection.execute(
     "UPDATE products SET sales_price = ? WHERE code = ?",
     [new_price, pack.pack_id]

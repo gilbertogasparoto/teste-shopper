@@ -2,6 +2,7 @@
   --background-color: #fafafa;
   --principal-color: #30ad5d;
   --secondary-color: #2d5c3d;
+  --terciary-color: #ad3631;
   --dark-color: #29292a;
   --grey-color: #b2b2b2;
   --light-grey-color: #eeeeee;
@@ -11,4 +12,18 @@
   font-family: "Rubik", sans-serif;
   margin: 0;
   padding: 0;
+  color: var(--dark-color);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-grey-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--principal-color);
+  border-radius: 10px;
 }

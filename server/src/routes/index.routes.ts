@@ -1,9 +1,8 @@
 import { Router } from "express";
 import productsController from "../controllers/productsController";
+require("express-async-errors");
 
 const router = Router();
-
-router.get("/", (req, res) => res.json("ola mundo"));
 
 router.get("/products", productsController.getAll);
 

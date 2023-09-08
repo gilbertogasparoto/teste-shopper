@@ -7,6 +7,13 @@
   border-radius: 8px;
 }
 
+.grid__list--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
 .grid__list--head,
 .grid__list--item {
   display: grid;
