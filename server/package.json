@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "cp .env ./dist/.env && tsc",
+    "start": "node ./dist/src/index.js",
     "dev": "nodemon src/index.ts --exec ts-node"
   },
   "keywords": [],

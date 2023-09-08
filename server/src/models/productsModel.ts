@@ -1,4 +1,3 @@
-import { APIError, HttpStatusCode } from "../../errors/BaseError";
 import { iPack } from "../interface/Pack";
 import { iPackedProduct, iProduct } from "../interface/Product";
 import connection from "./connection";

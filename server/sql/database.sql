@@ -1,6 +1,3 @@
-CREATE DATABASE shopper;
-
-USE shopper;
 
 CREATE TABLE products 
 ( 
